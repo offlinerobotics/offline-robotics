@@ -472,6 +472,7 @@ label.error {
 
 .box{
 	padding:30px 0 24px;
+    z-index:-1;
 	border-radius: 8px;
 	background: #fff;
 	margin-bottom:10px;
@@ -1233,7 +1234,7 @@ label.error {
 	width:100%;
 	top:0;
 	left:0;
-	z-index:99999;
+	z-index:10;
 	-webkit-transition:all .5s ease;
 	-moz-transition:all .5s ease;
 	transition:all .5s ease;
@@ -2099,7 +2100,7 @@ label.error {
 .feature-boxes{
 	margin-top:-80px;
 	position:relative;
-	z-index:100;
+	z-index:2;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -2539,6 +2540,7 @@ label.error {
 	font-weight:400;
 	line-height:2.5;
 	position:relative;
+    margin-left:-20px;
 }
 .pricing-bottom ul li .ti{
 	margin-right:10px;
