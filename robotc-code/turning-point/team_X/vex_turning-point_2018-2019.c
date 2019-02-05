@@ -7,7 +7,7 @@
 #pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_4,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port2,           LeftDrive,     tmotorVex393_MC29, openLoop, encoderPort, I2C_2)
-#pragma config(Motor,  port3,           Intake,        tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port3,           Lift2,        tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port4,           Flywheel,      tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port6,           Flywheel_2,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           Lift,          tmotorVex393_MC29, openLoop, encoderPort, I2C_4)
@@ -30,7 +30,7 @@
 	/* -------*
 	Ball Intake System
 	----*
-	*/
+
 	task Ball_Intake()
 	{
 		int N = 0;
@@ -43,12 +43,12 @@
 		if(K == 1) {
 			motor[port3] = 127;
 		}
-	}
+	}*/
 
 	/* -------*
 	Launch System
 	----*
-	*/
+
 	task Launch()
 	{
 		while(vexRT[Btn8D] == 0)
@@ -57,6 +57,8 @@
 			motor[port6] = 90;
 		}
 	}
+	*/
+
 
 
 /*
@@ -75,10 +77,10 @@ void pre_auton()
 	}
 
 	void getInput() {
-		 if(vexRT[#] == 1) currentSelection = RED_FRONT;
-	   if(vexRT[#] == 1) currentSelection = RED_BACK;
-	   if(vexRT[#] == 1) currentSelection = BLUE_FRONT;
-	   if(vexRT[#] == 1) currentSelection = BLUE_BACK;
+		 if(vexRT[7R] == 1) currentSelection = RED_FRONT;
+	   if(vexRT[7U] == 1) currentSelection = RED_BACK;
+	   if(vexRT[7L] == 1) currentSelection = BLUE_FRONT;
+	   if(vexRT[7D] == 1) currentSelection = BLUE_BACK;
 	}
 	-------*
 	*/
@@ -162,35 +164,29 @@ task usercontrol()
 			B = 0;
 		}
 
-		motor[port9] = A-B;
-		motor[port2] = A+B;
+		motor[port9] = A-B; //right
+		motor[port2] = A+B; //left
 
-		/* ---- Ball Intake ---- */
+		/* ---- Ball Intake ----
 		if(vexRT[Btn8R] == 1) {
 			startTask(Ball_Intake);
-		}
+		}*/
 
 	 /* ---- Lift System ---- */
 		if(vexRT[Btn7U] == 1) {
-				motor[port7] = 127;
+			motor[port3] = 127;
+			motor[port7] = -127;
 		}
 		if(vexRT[Btn7D] == 1) {
-		  	motor[port7] = -127;
+				motor[port3] = -127;
+		  	motor[port7] = 127;
 		}
 		if(vexRT[Btn7U] == vexRT[Btn7D]) {
 			  motor[port7] = 0;
-		} else {
-				motor[port7] = 0;
+			  motor[port3] = 0;
 		}
-		/* if(vexRT[Btn5U] == 1) startTask(Flip);
 
-		if(vexRT[Btn5D] == 1) startTask(Lift_P0);
-
-		if(vexRT[Btn6D] == 1) startTask(Lift_P1);
-
-		if(vexRT[Btn6U] == 1) startTask(Lift_P2); */
-
-		/* ---- Flywheel---- */
+		/* ---- Flywheel----
 		if(vexRT[Btn8U] == 1) {
 			startTask(Launch);
 		}
@@ -199,7 +195,7 @@ task usercontrol()
 		{
 			motor[port4] = 0;
 			motor[port6] = 0;
-		}
+		}/*
 
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn5U] == 1) {
