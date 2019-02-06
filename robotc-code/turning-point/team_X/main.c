@@ -15,7 +15,6 @@
 #pragma config(Motor,  port9,           RightDrive,    tmotorVex393_MC29, openLoop, encoderPort, I2C_3)
 
 
-
 /* Platform and competition controls
 ====================== */
 #pragma platform(VEX2)
@@ -23,51 +22,57 @@
 #include "Vex_Competition_Includes.c"
 #include "globals.h"
 
-
-/* User-defined tasks
+/* User-defined tasks and global variables
 ====================== */
+	// string currentSelection;
 
-void stopDrive(){
-	motor[port9] = NO_SPEED;
-	motor[port2] = NO_SPEED;
-}
+	void stopDrive(){
+		motor[port9] = 0;
+		motor[port2] = 0;
+	}
 
-void moveForward(float time, int speed){
-	wait1Msec(time);
-	stopDrive();
-}
+	void moveForward(float time, int speed){
+		motor[port9] = speed;
+		motor[port2] = -speed;
+		wait1Msec(time);
+		stopDrive();
+	}
 
-void moveBackward(float time, int speed){
-	wait1Msec(time);
-	stopDrive();
-}
+	void moveBackward(float time, int speed){
+		motor[port9] = -speed;
+		motor[port2] = speed;
+		wait1Msec(time);
+		stopDrive();
+	}
 
-void rightVeer(float time, int speed, int offset) {
-	wait1Msec(time);
-	stopDrive();
-}
+	/*void rightVeer(float time, int speed, int offset) {
+		wait1Msec(time);
+		stopDrive();
+	}
 
-void leftVeer(float time, int speed, int offset) {
-	wait1Msec(time);
-	stopDrive();
-}
+	void leftVeer(float time, int speed, int offset) {
+		wait1Msec(time);
+		stopDrive();
+	}*/
 
-/*
- Pre-autonomous mode
+/* Pre-autonomous mode
 ====================== */
 void pre_auton()
 {
 	bStopTasksBetweenModes = true;
+
 	/* -------*
 	Select Autonomous Procedure Based on Starting Position
-	----*
-	*/
+	----* */
+
+
 	while(bIfiRobotDisabled) {
-	   if(vexRT[7R] == 1) currentSelection = RED_FRONT;
-	   if(vexRT[7U] == 1) currentSelection = RED_BACK;
-	   if(vexRT[7L] == 1) currentSelection = BLUE_FRONT;
-	   if(vexRT[7D] == 1) currentSelection = BLUE_BACK;
+		if(vexRT[Btn5D] == 1) currentSelection = RED_FRONT;
+		if(vexRT[Btn5U] == 1) currentSelection = RED_BACK;
+		if(vexRT[Btn6D] == 1) currentSelection = BLUE_FRONT;
+		if(vexRT[Btn6U] == 1) currentSelection = BLUE_BACK;
 	}
+
 } // end preautonomous
 
 
@@ -78,32 +83,30 @@ task autonomous()
 {
 	/* -------*
 	Event Handle Every Possible Starting Position
-	----*
-	*/
-	
-	switch(currentSelection)
-	{
-		case RED_FRONT:
-		  // procedures
-			break;
+	----* */
+		switch(currentSelection)
+		{
+			case RED_FRONT:
+			  moveForward(3000, 127);
+				break;
 
-		case RED_BACK:
-			// procedures
-			break;
+			case RED_BACK:
+				moveForward(3000, 127);
+				break;
 
-		case BLUE_FRONT:
-			// procedures
-			break;
+			case BLUE_FRONT:
+				moveForward(3000, 127);
+				break;
 
-		case BLUE_BACK:
-			// procedures
-			break;
+			case BLUE_BACK:
+				moveForward(3000, 127);
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
 
-		}
-	}
+			// AutonomousCodePlaceholderForTesting();
 
 }	// end autonomous
 
@@ -146,15 +149,30 @@ task usercontrol()
 			B = 0;
 		}
 
+
 		motor[port9] = A-B; //right
 		motor[port2] = A+B; //left
 
+	 /* ---- Lift System ---- */
+		if(vexRT[Btn7U] == 1) {
+			motor[port3] = 127;
+			motor[port7] = -127;
+		}
+		if(vexRT[Btn7D] == 1) {
+				motor[port3] = -127;
+		  	motor[port7] = 127;
+		}
+		if(vexRT[Btn7U] == vexRT[Btn7D]) {
+			  motor[port7] = 0;
+			  motor[port3] = 0;
+		}
+
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn5U] == 1) {
-			motor[port8] = MAX_SPEED;
+			motor[port8] = 127;
 		}
 		if(vexRT[Btn5D] == 1) {
-			motor[port8] = REV_SPEED;
+			motor[port8] = -127;
 		}
 		if(vexRT[Btn5D] == vexRT[Btn5U]) {
 			motor[port8] = 0;
