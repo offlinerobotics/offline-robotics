@@ -45,15 +45,19 @@
 		stopDrive();
 	}
 
-	/*void rightVeer(float time, int speed, int offset) {
-		wait1Msec(time);
-		stopDrive();
+	void pivot(int direction, int maxSpeed, float revolutions) {
+		int ticks = revolutions * 627.2;
+		if (direction == 1)  {  // counterclockwise
+			moveMotorTarget(port9, ticks, maxSpeed, true);
+			moveMotorTarget(port2, -ticks, maxSpeed, true);
+			wait1Msec(100);
+		}
+		if (direction == 0) {  // clockwise
+			moveMotorTarget(port9, -ticks, maxSpeed, true);
+			moveMotorTarget(port2, ticks, maxSpeed, true);
+			wait1Msec(100);
+		}
 	}
-
-	void leftVeer(float time, int speed, int offset) {
-		wait1Msec(time);
-		stopDrive();
-	}*/
 
 /* Pre-autonomous mode
 ====================== */
@@ -88,17 +92,25 @@ task autonomous()
 		{
 			case RED_FRONT:
 			  moveForward(3000, 127);
+			  pivot(0, 50, 0.5);
+			  moveForward(3000, 127);
 				break;
 
 			case RED_BACK:
+				moveForward(3000, 127);
+				pivot(1, 50, 0.5);
 				moveForward(3000, 127);
 				break;
 
 			case BLUE_FRONT:
 				moveForward(3000, 127);
+				pivot(1, 50, 0.5);
+				moveForward(3000, 127);
 				break;
 
 			case BLUE_BACK:
+				moveForward(3000, 127);
+				pivot(0, 50, 0.5);
 				moveForward(3000, 127);
 				break;
 
