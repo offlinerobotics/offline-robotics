@@ -77,7 +77,7 @@ void pre_auton()
 	}
 
 	void getInput() {
-		 if(vexRT[7R] == 1) currentSelection = RED_FRONT;
+	   if(vexRT[7R] == 1) currentSelection = RED_FRONT;
 	   if(vexRT[7U] == 1) currentSelection = RED_BACK;
 	   if(vexRT[7L] == 1) currentSelection = BLUE_FRONT;
 	   if(vexRT[7D] == 1) currentSelection = BLUE_BACK;
@@ -174,16 +174,16 @@ task usercontrol()
 
 	 /* ---- Lift System ---- */
 		if(vexRT[Btn7U] == 1) {
-			motor[port3] = 127;
-			motor[port7] = -127;
+			motor[port3] = MAX_SPEED;
+			motor[port7] = REV_SPEED;
 		}
 		if(vexRT[Btn7D] == 1) {
-				motor[port3] = -127;
-		  	motor[port7] = 127;
+				motor[port3] = REV_SPEED;
+		  	motor[port7] = MAX_SPEED;
 		}
 		if(vexRT[Btn7U] == vexRT[Btn7D]) {
-			  motor[port7] = 0;
-			  motor[port3] = 0;
+			  motor[port7] = NO_SPEED;
+			  motor[port3] = NO_SPEED;
 		}
 
 		/* ---- Flywheel----
@@ -199,10 +199,10 @@ task usercontrol()
 
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn5U] == 1) {
-			motor[port8] = 127;
+			motor[port8] = MAX_SPEED;
 		}
 		if(vexRT[Btn5D] == 1) {
-			motor[port8] = -127;
+			motor[port8] = REV_SPEED;
 		}
 		if(vexRT[Btn5D] == vexRT[Btn5U]) {
 			motor[port8] = 0;
