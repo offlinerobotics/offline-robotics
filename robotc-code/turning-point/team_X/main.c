@@ -27,39 +27,30 @@
 /* User-defined tasks
 ====================== */
 
-	/* -------*
-	Ball Intake System
-	----*
+void stopDrive(){
+	motor[port9] = NO_SPEED;
+	motor[port2] = NO_SPEED;
+}
 
-	task Ball_Intake()
-	{
-		int N = 0;
-		if(vexRT[Btn8R] == 1)
-		{
-	  	N = N + 1;
-			waitUntil(vexRT[Btn8R] == 0);
-		}
-		int K = pow(-1,N);
-		if(K == 1) {
-			motor[port3] = 127;
-		}
-	}*/
+void moveForward(float time, int speed){
+	wait1Msec(time);
+	stopDrive();
+}
 
-	/* -------*
-	Launch System
-	----*
+void moveBackward(float time, int speed){
+	wait1Msec(time);
+	stopDrive();
+}
 
-	task Launch()
-	{
-		while(vexRT[Btn8D] == 0)
-		{
-			motor[port4] = 90;
-			motor[port6] = 90;
-		}
-	}
-	*/
+void rightVeer(float time, int speed, int offset) {
+	wait1Msec(time);
+	stopDrive();
+}
 
-
+void leftVeer(float time, int speed, int offset) {
+	wait1Msec(time);
+	stopDrive();
+}
 
 /*
  Pre-autonomous mode
@@ -71,19 +62,12 @@ void pre_auton()
 	Select Autonomous Procedure Based on Starting Position
 	----*
 	*/
-
-	/* while(bIfiRobotDisabled) {
-			getInput();
-	}
-
-	void getInput() {
+	while(bIfiRobotDisabled) {
 	   if(vexRT[7R] == 1) currentSelection = RED_FRONT;
 	   if(vexRT[7U] == 1) currentSelection = RED_BACK;
 	   if(vexRT[7L] == 1) currentSelection = BLUE_FRONT;
 	   if(vexRT[7D] == 1) currentSelection = BLUE_BACK;
 	}
-	-------*
-	*/
 } // end preautonomous
 
 
@@ -95,34 +79,32 @@ task autonomous()
 	/* -------*
 	Event Handle Every Possible Starting Position
 	----*
-	doAuto();
+	*/
+	
+	switch(currentSelection)
+	{
+		case RED_FRONT:
+		  // procedures
+			break;
 
-	void duAuto() {
-		switch(currentSelection)
-		{
-			case RED_FRONT:
-			  // procedures
-				break;
+		case RED_BACK:
+			// procedures
+			break;
 
-			case RED_BACK:
-				// procedures
-				break;
+		case BLUE_FRONT:
+			// procedures
+			break;
 
-			case BLUE_FRONT:
-				// procedures
-				break;
+		case BLUE_BACK:
+			// procedures
+			break;
 
-			case BLUE_BACK:
-				// procedures
-				break;
+		default:
+			break;
 
-			default:
-				break;
-
-			}
 		}
-		-------*
-		*/
+	}
+
 }	// end autonomous
 
 
@@ -166,36 +148,6 @@ task usercontrol()
 
 		motor[port9] = A-B; //right
 		motor[port2] = A+B; //left
-
-		/* ---- Ball Intake ----
-		if(vexRT[Btn8R] == 1) {
-			startTask(Ball_Intake);
-		}*/
-
-	 /* ---- Lift System ---- */
-		if(vexRT[Btn7U] == 1) {
-			motor[port3] = MAX_SPEED;
-			motor[port7] = REV_SPEED;
-		}
-		if(vexRT[Btn7D] == 1) {
-				motor[port3] = REV_SPEED;
-		  	motor[port7] = MAX_SPEED;
-		}
-		if(vexRT[Btn7U] == vexRT[Btn7D]) {
-			  motor[port7] = NO_SPEED;
-			  motor[port3] = NO_SPEED;
-		}
-
-		/* ---- Flywheel----
-		if(vexRT[Btn8U] == 1) {
-			startTask(Launch);
-		}
-
-		if(vexRT[Btn8D] == 1)
-		{
-			motor[port4] = 0;
-			motor[port6] = 0;
-		}/*
 
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn5U] == 1) {
