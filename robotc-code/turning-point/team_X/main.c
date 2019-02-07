@@ -59,12 +59,20 @@
 			moveMotorTarget(port2, ticks, maxSpeed, true);
 			wait1Msec(100);
 		}*/
-		while(SensorValue[I2C_2] < (revolutions)) {
-			motor[port2] = maxSpeed;
-		}
-		while(SensorValue[I2C_3] < (revolutions)) {
+		if (direction == 0) {
+			while(SensorValue[I2C_2] < (360 * revolutions)) {
+					motor[port2] = maxSpeed;	
+			  }		
+		 }
+		 else if (direction == 1) {
+			while(SensorValue[I2C_2] < (360 * revolutions)) {
+					motor[port9] = maxSpeed;	
+			  }		   
+		 }
+		
+		/*while(SensorValue[I2C_3] < (360 * revolutions)) {
 			motor[port9] = maxSpeed;
-		}		
+		}	*/	
 		wait1Msec(100);
 	}
 
@@ -92,7 +100,7 @@ task autonomous()
 	/* -------*
 	Toggle Autonomous Mode
 	----* */
-	currentSelection = RED_FRONT;
+	currentSelection = RED_BACK;
 	// currentSelection = RED_BACK;
 	// currentSelection = BLUE_FRONT;
 	// currentSelection = BLUE_BACK;
@@ -105,26 +113,29 @@ task autonomous()
 			case RED_FRONT:
 			  moveForward(2700, 127);
 			  moveBackward(1100,127);
-			  pivot(0, 50, 0.5);
+			  pivot(1, 50, 0.5);
 			  moveForward(3000, 127);
 				break;
 
 			case RED_BACK:
-				moveForward(3000, 127);
-				pivot(1, 50, 0.5);
-				moveForward(3000, 127);
+			  moveForward(2700, 127);
+			  moveBackward(1100,127);
+			  pivot(1, 50, 0.5);
+			  moveForward(3000, 127);
 				break;
 
 			case BLUE_FRONT:
-				moveForward(3000, 127);
-				pivot(1, 50, 0.5);
-				moveForward(3000, 127);
+			  moveForward(2700, 127);
+			  moveBackward(1100,127);
+			  pivot(0, 50, 0.5);
+			  moveForward(3000, 127);
 				break;
 
 			case BLUE_BACK:
-				moveForward(3000, 127);
-				pivot(0, 127, 0.25);
-				moveForward(3000, 127);
+			  moveForward(2700, 127);
+			  moveBackward(1100,127);
+			  pivot(0, 50, 0.5);
+			  moveForward(3000, 127);
 				break;
 
 			default:
