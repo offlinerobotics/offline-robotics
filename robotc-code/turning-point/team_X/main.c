@@ -15,6 +15,7 @@
 #pragma config(Motor,  port9,           RightDrive,    tmotorVex393_MC29, openLoop, encoderPort, I2C_3)
 
 
+
 /* Platform and competition controls
 ====================== */
 #pragma platform(VEX2)
@@ -22,9 +23,10 @@
 #include "Vex_Competition_Includes.c"
 #include "globals.h"
 
+
+
 /* User-defined tasks and global variables
 ====================== */
-	// string currentSelection;
 
 	void stopDrive(){
 		motor[port9] = 0;
@@ -33,20 +35,20 @@
 
 	void moveForward(float time, int speed){
 		motor[port9] = speed;
-		motor[port2] = -speed;
+		motor[port2] = speed;
 		wait1Msec(time);
 		stopDrive();
 	}
 
 	void moveBackward(float time, int speed){
 		motor[port9] = -speed;
-		motor[port2] = speed;
+		motor[port2] = -speed;
 		wait1Msec(time);
 		stopDrive();
 	}
 
 	void pivot(int direction, int maxSpeed, float revolutions) {
-		int ticks = revolutions * 627.2;
+		/*int ticks = revolutions * 627.2;
 		if (direction == 1)  {  // counterclockwise
 			moveMotorTarget(port9, ticks, maxSpeed, true);
 			moveMotorTarget(port2, -ticks, maxSpeed, true);
@@ -56,7 +58,14 @@
 			moveMotorTarget(port9, -ticks, maxSpeed, true);
 			moveMotorTarget(port2, ticks, maxSpeed, true);
 			wait1Msec(100);
+		}*/
+		while(SensorValue[I2C_2] < (revolutions)) {
+			motor[port2] = maxSpeed;
 		}
+		while(SensorValue[I2C_3] < (revolutions)) {
+			motor[port9] = maxSpeed;
+		}		
+		wait1Msec(100);
 	}
 
 /* Pre-autonomous mode
@@ -66,16 +75,11 @@ void pre_auton()
 	bStopTasksBetweenModes = true;
 
 	/* -------*
-	Select Autonomous Procedure Based on Starting Position
-	----* */
-
-
-	while(bIfiRobotDisabled) {
-		if(vexRT[Btn5D] == 1) currentSelection = RED_FRONT;
-		if(vexRT[Btn5U] == 1) currentSelection = RED_BACK;
-		if(vexRT[Btn6D] == 1) currentSelection = BLUE_FRONT;
-		if(vexRT[Btn6U] == 1) currentSelection = BLUE_BACK;
-	}
+	Motor Encoder Reset
+	----*
+	*/
+	resetMotorEncoder(port8);
+	resetMotorEncoder(port7);
 
 } // end preautonomous
 
@@ -86,12 +90,21 @@ void pre_auton()
 task autonomous()
 {
 	/* -------*
+	Toggle Autonomous Mode
+	----* */
+	currentSelection = RED_FRONT;
+	// currentSelection = RED_BACK;
+	// currentSelection = BLUE_FRONT;
+	// currentSelection = BLUE_BACK;
+
+	/* -------*
 	Event Handle Every Possible Starting Position
 	----* */
 		switch(currentSelection)
 		{
 			case RED_FRONT:
-			  moveForward(3000, 127);
+			  moveForward(2700, 127);
+			  moveBackward(1100,127);
 			  pivot(0, 50, 0.5);
 			  moveForward(3000, 127);
 				break;
@@ -110,7 +123,7 @@ task autonomous()
 
 			case BLUE_BACK:
 				moveForward(3000, 127);
-				pivot(0, 50, 0.5);
+				pivot(0, 127, 0.25);
 				moveForward(3000, 127);
 				break;
 
@@ -129,14 +142,6 @@ task autonomous()
 
 task usercontrol()
 {
-	/* -------*
-	Motor Encoder Reset
-	----*
-	*/
-	resetMotorEncoder(port8);
-	resetMotorEncoder(port7);
-
-
 	/* -------*
 	Main Execution Loop
 	----*
@@ -161,7 +166,6 @@ task usercontrol()
 			B = 0;
 		}
 
-
 		motor[port9] = A-B; //right
 		motor[port2] = A+B; //left
 
@@ -181,10 +185,10 @@ task usercontrol()
 
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn5U] == 1) {
-			motor[port8] = 127;
+			motor[port8] = 75;
 		}
 		if(vexRT[Btn5D] == 1) {
-			motor[port8] = -127;
+			motor[port8] = -75;
 		}
 		if(vexRT[Btn5D] == vexRT[Btn5U]) {
 			motor[port8] = 0;
