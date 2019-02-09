@@ -45,8 +45,10 @@
 		motor[port2] = -speed;
 		wait1Msec(time);
 		stopDrive();
-	}
-
+	} 
+	
+			
+	
 	void pivot(int direction, int maxSpeed, float revolutions) {
 		/*int ticks = revolutions * 627.2;
 		if (direction == 1)  {  // counterclockwise
@@ -157,6 +159,7 @@ task usercontrol()
 	Main Execution Loop
 	----*
 	*/
+	
 	while(true)
 	{
 		/* ---- Variable initialization ---- */
@@ -177,8 +180,8 @@ task usercontrol()
 			B = 0;
 		}
 
-		motor[port9] = A-B; //right
-		motor[port2] = A+B; //left
+		motor[port2] = A-B; //right
+		motor[port9] = A+B; //left
 
 	 /* ---- Lift System ---- */
 		if(vexRT[Btn7U] == 1) {
@@ -195,7 +198,15 @@ task usercontrol()
 		}
 
 		/* ---- Flipping mechanism ---- */
-		if(vexRT[Btn5U] == 1) {
+		if(vexRT[Btn5U] == 1)
+			setMotorTarget(port8, 60, 65, 1);
+
+		else if(vexRT[Btn5D] == 1)
+		{
+			motor[port8] = -60;
+		}
+		else motor[port8] = 0;
+		/*if((vexRT[Btn5U] == 1) && ) {
 			motor[port8] = 75;
 		}
 		if(vexRT[Btn5D] == 1) {
@@ -203,6 +214,6 @@ task usercontrol()
 		}
 		if(vexRT[Btn5D] == vexRT[Btn5U]) {
 			motor[port8] = 0;
-		}
+		}*/
 	}
 } //end user control
