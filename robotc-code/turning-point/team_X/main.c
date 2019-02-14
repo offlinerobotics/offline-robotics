@@ -8,10 +8,8 @@
 #pragma config(Sensor, I2C_4,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port2,           LeftDrive,     tmotorVex393_MC29, openLoop, encoderPort, I2C_2)
 #pragma config(Motor,  port3,           Lift2,        tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port4,           Flywheel,      tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port6,           Flywheel_2,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           Lift,          tmotorVex393_MC29, openLoop, encoderPort, I2C_4)
-#pragma config(Motor,  port8,           Flipper,       tmotorVex393_MC29, openLoop, encoderPort, I2C_1)
+#pragma config(Motor,  port4,           Flipper,       tmotorVex393_MC29, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port9,           RightDrive,    tmotorVex393_MC29, openLoop, encoderPort, I2C_3)
 
 
@@ -88,7 +86,7 @@ void pre_auton()
 	Motor Encoder Reset
 	----*
 	*/
-	resetMotorEncoder(port8);
+	resetMotorEncoder(port4);
 	resetMotorEncoder(port7);
 
 } // end preautonomous
@@ -199,13 +197,15 @@ task usercontrol()
 
 		/* ---- Flipping mechanism ---- */
 		if(vexRT[Btn6U] == 1)
-			setMotorTarget(port8, 60, 65, 1);
+			{
+			motor[port4] = 60;
+		}																				//	setMotorTarget(port4, 60, 65, 1);
 
 		else if(vexRT[Btn6D] == 1)
 		{
-			motor[port8] = -60;
+			motor[port4] = -60;
 		}
-		else motor[port8] = 0;
+		else motor[port4] = 0;
 		/*if((vexRT[Btn5U] == 1) && ) {
 			motor[port8] = 75;
 		}
