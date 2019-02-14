@@ -183,25 +183,25 @@ task usercontrol()
 		motor[port2] = A-B; //right
 		motor[port9] = A+B; //left
 
-	 /* ---- Lift System ---- */
-		if(vexRT[Btn7U] == 1) {
+		 /* ---- Lift System ---- */
+		if(vexRT[Btn8U] == 1) {
 			motor[port3] = 127;
 			motor[port7] = -127;
 		}
-		if(vexRT[Btn7D] == 1) {
+		if(vexRT[Btn8D] == 1) {
 				motor[port3] = -127;
 		  	motor[port7] = 127;
 		}
-		if(vexRT[Btn7U] == vexRT[Btn7D]) {
+		if(vexRT[Btn8U] == vexRT[Btn8D]) {
 			  motor[port7] = 0;
 			  motor[port3] = 0;
 		}
 
 		/* ---- Flipping mechanism ---- */
-		if(vexRT[Btn5U] == 1)
+		if(vexRT[Btn6U] == 1)
 			setMotorTarget(port8, 60, 65, 1);
 
-		else if(vexRT[Btn5D] == 1)
+		else if(vexRT[Btn6D] == 1)
 		{
 			motor[port8] = -60;
 		}
