@@ -1,0 +1,156 @@
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*        Description: Competition template for VEX EDR                      */
+/*                                                                           */
+/*---------------------------------------------------------------------------*/
+
+// This code is for the VEX cortex platform
+#pragma platform(VEX2)
+
+// Select Download method as "competition"
+#pragma competitionControl(Competition)
+
+//Main competition background code...do not modify!
+#include "Vex_Competition_Includes.c"
+
+/*---------------------------------------------------------------------------*/
+/*                          Pre-Autonomous Functions                         */
+/*                                                                           */
+/*  You may want to perform some actions before the competition starts.      */
+/*  Do them in the following function.  You must return from this function   */
+/*  or the autonomous and usercontrol tasks will not be started.  This       */
+/*  function is only called once after the cortex has been powered on and    */
+/*  not every time that the robot is disabled.                               */
+/*---------------------------------------------------------------------------*/
+
+void pre_auton()
+{
+	// Set bStopTasksBetweenModes to false if you want to keep user created tasks
+	// running between Autonomous and Driver controlled modes. You will need to
+	// manage all user created tasks if set to false.
+	bStopTasksBetweenModes = true;
+
+	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
+	// used by the competition include file, for example, you might want
+	// to display your team name on the LCD in this function.
+	// bDisplayCompetitionStatusOnLcd = false;
+
+	// All activities that occur before the competition starts
+	// Example: clearing encoders, setting servo positions, ...
+}
+
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              Autonomous Task                              */
+/*                                                                           */
+/*  This task is used to control your robot during the autonomous phase of   */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
+
+task autonomous()
+{
+	motor[port4]=127;
+	wait1Msec(3500);
+	motor[port4]=0;
+	wait1Msec(0100);
+	motor[port2]=-127;
+	motor[port3]=-127;
+	motor[port6]=127;
+	motor[port7]=127;
+	wait1Msec(0500);
+	motor[port2]=0;
+	motor[port3]=0;
+	motor[port6]=0;
+	motor[port7]=0;
+	wait1Msec(0100);
+	motor[port2]=127;
+	motor[port3]=127;
+	motor[port6]=120;
+	motor[port7]=120;
+	wait1Msec(4000);
+	motor[port2]=0;
+	motor[port3]=0;
+	motor[port6]=0;
+	motor[port7]=0;
+}
+
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              User Control Task                            */
+/*                                                                           */
+/*  This task is used to control your robot during the user control phase of */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
+
+task usercontrol()
+
+
+{
+	int deadzone = 20;
+	while(true)
+	{
+		if(abs(vexRT[Ch2]) > deadzone)
+		{
+			motor[port6] = vexRT[Ch2]; //joysticks drive
+			motor[port7] = vexRT[Ch2];
+		}
+		else
+		{
+			motor[port6] = 0;
+			motor[port7] = 0;
+		}
+
+		if(abs(vexRT[Ch3]) > deadzone)
+		{
+			motor[port2] = vexRT[Ch3];
+			motor[port3] = vexRT[Ch3];
+		}
+		else
+		{
+			motor[port2] = 0;
+			motor[port3] = 0;
+		}
+
+		if(vexRT[Btn7D]==1) //launcher
+		{
+			motor[port4]=127;
+		}
+		else
+		{
+			motor[port4]=0;
+		}
+		if(vexRT[Btn7D]==1) //launcher
+		{
+			motor[port4]=127;
+			motor[port8]=127;
+		}
+		else
+		{
+			motor[port4]=0;
+			motor[port8]=0;
+		}
+
+		if(vexRT[Btn6U]==1) //intake
+		{
+			motor[port8]=127;
+			motor[port5]=127;
+		}
+		else if(vexRT[Btn6D]==1) //intake-reverse
+		{
+			motor[port8]=-127;
+			motor[port5]=-127;
+
+		}
+		else
+		{
+			motor[port8]=0;
+			motor[port5]=0;
+
+		}
+
+	}
+}
